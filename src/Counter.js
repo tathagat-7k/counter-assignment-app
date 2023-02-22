@@ -5,6 +5,7 @@ const ONE_SEC = 1000;
 const Counter = () => {
   const [counter, setCounter] = useState(0);
   const [showPauseButton, setShowPauseButton] = useState(false);
+  const [isCounterPaused, setIsCounterPaused] = useState(false);
 
   const counterInterval = useRef();
 
@@ -16,7 +17,12 @@ const Counter = () => {
   };
 
   const stopCounting = () => {
-    clearInterval(counterInterval.current);
+    if (isCounterPaused) {
+      startCounting();
+    } else {
+      clearInterval(counterInterval.current);
+    }
+    setIsCounterPaused(!isCounterPaused);
   };
 
   const resetCounter = () => {
@@ -33,7 +39,9 @@ const Counter = () => {
           <button onClick={startCounting}>Start</button>
         ) : (
           <>
-            <button onClick={stopCounting}>Pause</button>
+            <button onClick={stopCounting}>
+              {isCounterPaused ? "Resume" : "Pause"}
+            </button>
             <button onClick={resetCounter}>Reset</button>
           </>
         )}
